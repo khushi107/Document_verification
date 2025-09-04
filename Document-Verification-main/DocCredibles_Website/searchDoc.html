@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9fafb; /* Light background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background-color: #fff; /* White card background */
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      padding: 20px;
+      text-align: center;
+    }
+    header {
+    text-align: center;
+    padding: 4rem 0;
+    background-color: #1e88e5;
+    color: white;
+}
+    img {
+      margin: 0 auto 20px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    input, select {
+      width: 30%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #d1d5db; /* Neutral border color */
+      border-radius: 4px;
+    }
+
+    .button-primary {
+      background-color: #2563eb; /* Blue primary button */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-primary:hover {
+      background-color: #1e3a8a; /* Darker blue on hover */
+    }
+
+    .button-secondary {
+      background-color: #10b981; /* Green secondary button */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-secondary:hover {
+      background-color: #047857; /* Darker green on hover */
+    }
+
+    .mt-4 {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img alt="Document Icon" class="mb-4" height="80" src="https://storage.googleapis.com/a1aa/image/TdPM9Rtg79qfOqirLE9BECVbIUpoZHt3hWC70FVHM2YLZt9JA.jpg" width="80"/>
+    <h3 class="text-xl font-bold mb-2">View Documents</h3>
+    <p class="mb-4">Access and review uploaded documents.</p>
+    <button class="button-primary mb-4" id="viewDocumentsBtn">View Documents</button>
+
+    <div id="searchSection" class="hidden">
+      <h3 class="text-xl font-bold mb-2">Search Documents</h3>
+      <input type="text" id="enrollmentInput" placeholder="Enter Enrollment ID" />
+      <button id="searchButton" class="button-primary">Search</button>
+      <div id="cidList" class="mt-4"></div>
+      <button id="viewTranscriptButton" class="button-secondary mt-4 hidden">View Transcript</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("viewDocumentsBtn").addEventListener("click", () => {
+      document.getElementById("searchSection").classList.remove("hidden");
+    });
+
+    document.getElementById("searchButton").addEventListener("click", async () => {
+      const enrollmentId = document.getElementById("enrollmentInput").value.trim();
+
+      if (!enrollmentId) {
+        alert("Please enter a valid Enrollment ID.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3000/get-cids/${enrollmentId}`);
+        const result = await response.json();
+
+        if (response.status === 404) {
+          alert(result.message);
+          return;
+        }
+
+        if (result.cids) {
+          const cidList = document.getElementById("cidList");
+          cidList.innerHTML = "";
+
+          const select = document.createElement("select");
+          select.id = "cidDropdown";
+
+          result.cids.forEach((cid, index) => {
+            const option = document.createElement("option");
+            option.value = cid;
+            option.textContent = `CID ${index + 1}: ${cid}`;
+            select.appendChild(option);
+          });
+
+          cidList.appendChild(select);
+          document.getElementById("viewTranscriptButton").classList.remove("hidden");
+        }
+      } catch (error) {
+        console.error("Error fetching CIDs:", error);
+        alert("Failed to fetch documents. Please try again.");
+      }
+    });
+
+    document.getElementById("viewTranscriptButton").addEventListener("click", () => {
+      const selectedCid = document.getElementById("cidDropdown").value;
+      if (!selectedCid) {
+        alert("Please select a valid CID.");
+        return;
+      }
+      localStorage.setItem("selectedCid", selectedCid);
+      window.location.href = "view-transcript.html";
+    });
+  </script>
+</body>
+</html>

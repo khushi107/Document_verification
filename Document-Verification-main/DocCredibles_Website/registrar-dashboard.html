@@ -1,0 +1,619 @@
+<html lang="en">
+ <head>
+    <style>
+        .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+    </style>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Registrar Dashboard45
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+ </head>
+ <body class="bg-gray-100 font-roboto">
+  <header class="bg-blue-600 text-white p-4">
+   <h1 class="text-2xl font-bold">
+    Registrar Dashboard
+   </h1>
+   <p>
+    Welcome, Registrar! Manage document verification, uploads, and more.
+   </p>
+  </header>
+  <nav class="bg-blue-500 text-white p-4">
+   <ul class="flex space-x-4">
+    <li>
+     <a class="hover:underline" href="registrar-dashboard.html">
+      Dashboard
+     </a>
+    </li>
+    <li>
+     <a class="hover:underline" href="#documents">
+      Documents
+     </a>
+    </li>
+    <li>
+     <a class="hover:underline" href="#upload">
+      Upload
+     </a>
+    </li>
+    <li>
+     <a class="hover:underline" href="#settings">
+      Settings
+     </a>
+    </li>
+    <li>
+     <a class="hover:underline" href="index.html">
+      Logout
+     </a>
+    </li>
+   </ul>
+  </nav>
+  <div class="container mx-auto p-4">
+   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="bg-white p-4 rounded shadow">
+     <img alt="Icon representing document upload" class="mb-4" height="80" src="https://storage.googleapis.com/a1aa/image/nxpnkCKCjm5jCdIy8t5H9VSfx3UvjLJoWGHgtoYBojPMZt9JA.jpg" width="80"/>
+     <h3 class="text-xl font-bold mb-2">
+      Scan &amp; Upload Document
+     </h3>
+     <p class="mb-4">
+      Verify Document with BlockChain...
+     </p>
+     <form class="mb-4" enctype="multipart/form-data" id="scanForm" method="POST" action="/scan-document">
+      <input accept="image/*" class="mb-2" id="fileInput" name="image" required="" type="file"/>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded" type="submit">
+       Scan Document
+      </button>
+     </form>
+     <div id="loading" style="display: none;">
+        <p>Processing...</p>
+        <div class="spinner"></div>
+    </div>    
+    <div class="text-green-600" id="scanResult"></div>
+<div id="verificationStatus" class="flex items-center mt-2" style="display: none;">
+    <img id="statusIcon" alt="Status Icon" width="24" height="24" class="mr-2"/>
+    <span id="statusMessage"></span>
+</div>
+
+     <div class="text-green-600" id="scanResult">
+     </div>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+     <img alt="Icon representing document viewing" class="mb-4" height="80" src="https://storage.googleapis.com/a1aa/image/TdPM9Rtg79qfOqirLE9BECVbIUpoZHt3hWC70FVHM2YLZt9JA.jpg" width="80"/>
+     <h3 class="text-xl font-bold mb-2">
+      View Documents
+     </h3>
+     <p class="mb-4">
+      Access and review uploaded documents.
+     </p>
+     <button class="bg-blue-600 text-white px-4 py-2 rounded mb-4" id="viewDocumentsBtn">
+      View Documents
+     </button>
+     <div id="searchSection" style="display: none;" class="bg-white p-4 rounded shadow">
+        <h3 class="text-xl font-bold mb-2">Search Documents</h3>
+        <input
+            type="text"
+            id="enrollmentInput"
+            placeholder="Enter Enrollment ID"
+            class="mb-4 p-2 border rounded w-full"
+        />
+        <button
+            id="searchButton"
+            class="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+            Search
+        </button>
+        <div id="cidList" class="mt-4">
+            <!-- List of CIDs will be populated here -->
+        </div>
+        <button
+            id="viewTranscriptButton"
+            class="bg-green-600 text-white px-4 py-2 rounded mt-4"
+            style="display: none;"
+        >
+            View Transcript
+        </button>
+    </div>    
+     <div class="text-gray-700" id="documentsList">
+     </div>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+     <img alt="Icon representing adding information" class="mb-4" height="80" src="https://storage.googleapis.com/a1aa/image/dMAHnquF6ToPGlfJH57p0IWMGBKysrxihKlvfM1k5uoZya7TA.jpg" width="80"/>
+     <h3 class="text-xl font-bold mb-2">
+      Add Document
+     </h3>
+     <p class="mb-4">
+      Store Documnet to blockchain.
+     </p>
+     <button class="bg-blue-600 text-white px-4 py-2 rounded mb-4" id="addInfoBtn">
+      Add Doc
+     </button>
+     <div class="hidden" id="addInfoContainer">
+      <form class="mb-4" enctype="multipart/form-data" id="excelUploadForm">
+       <input accept=".xls,.xlsx" class="mb-2" id="excelInput" name="excel" required="" type="file"/>
+       <button class="bg-blue-600 text-white px-4 py-2 rounded" type="submit">
+        Upload Excel
+       </button>
+      </form>
+      <div id="loading2" style="display: none;">
+        <p>Processing...</p>
+        <div class="spinner"></div>
+    </div>  
+      <div class="text-green-600" id="excelUploadResult">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <footer class="bg-blue-600 text-white p-4 text-center">
+   <p>
+    © 2024 Blockchain Document Verification System. All Rights Reserved.
+   </p>
+  </footer>
+  <script>
+   document.getElementById('scanForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a document to scan');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // Show loading spinner
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('scanResult').innerText = '';
+
+            try {
+                const response = await fetch('http://localhost:3000/scan-document', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to scan the document');
+                }
+
+                const result = await response.json();
+                console.log(result);
+                //document.getElementById('scanResult').innerText = `Extracted Text: ${result.extractedText}`;
+                const verificationStatusElement = document.getElementById('verificationStatus');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusMessage = document.getElementById('statusMessage');
+
+        if (result.verified) {
+            statusIcon.src = 'verfied-symbol-icon.webpg';  // Use appropriate icon for verified status
+            statusMessage.innerText = 'Document Verified';
+            statusMessage.style.color = 'green';
+        } else {
+            statusIcon.src = 'path/to/not-verified-icon.png';  // Use appropriate icon for not verified status
+            statusMessage.innerText = 'Document Not Verified';
+            statusMessage.style.color = 'red';
+        }
+
+        verificationStatusElement.style.display = 'flex'; 
+                // Verify the hash of the JSON
+                //await verifyHashOnBlockchain(result);
+            } catch (error) {
+                console.error('Error scanning document:', error);
+                alert('Failed to scan the document');
+            } finally {
+                // Hide loading spinner
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+async function verifyDocument(file) {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const response = await fetch('http://localhost:3000/scan-document', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            // Update the UI based on the verification status
+            const statusElement = document.getElementById('verification-status');
+            if (data.verified) {
+                statusElement.innerHTML = '<span style="color: green;">✔ Document Verified</span>';
+            } else {
+                statusElement.innerHTML = '<span style="color: red;">✘ Document Not Verified</span>';
+            }
+        } else {
+            console.error('Error in response:', data.error);
+            alert('Failed to verify the document.');
+        }
+    } catch (error) {
+        console.error('Error verifying document:', error);
+        alert('An error occurred while verifying the document.');
+    }
+}
+
+// Function to verify the hash of the OCR result JSON on the blockchain
+async function verifyHashOnBlockchain(ocrResult) {
+    try {
+        // Calculate hash of the JSON object
+        const jsonString = JSON.stringify(ocrResult);
+        const hash = web3.utils.sha3(jsonString);  // Calculate SHA3 hash of the JSON
+
+        // Verify the hash on the blockchain using the smart contract
+        const contractAddress = "0x39d9ee906ae101E9b086f7E53eB383169F6533Eb";
+        const abi = [
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "hash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "HashStored",
+        "type": "event"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            }
+        ],
+        "name": "getHash",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_hash",
+                "type": "string"
+            }
+        ],
+        "name": "storeHash",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_hash",
+                "type": "string"
+            }
+        ],
+        "name": "verifyHash",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
+        
+        const web3 = new Web3('http://127.0.0.1:7545');
+        const accounts = await web3.eth.getAccounts();
+        const contract = new web3.eth.Contract(abi, contractAddress);
+
+        // Call the verifyHash function to check if the hash exists on the blockchain
+        const isVerified = await contract.methods.verifyHash(hash).call();
+
+        // Show verification result on the frontend
+        if (isVerified) {
+            alert('Document hash verified successfully on the blockchain!');
+            document.getElementById('scanResult').innerText += `\nVerification Status: Verified`;
+        } else {
+            alert('Document hash verification failed!');
+            document.getElementById('scanResult').innerText += `\nVerification Status: Not Verified`;
+        }
+    } catch (error) {
+        console.error('Error interacting with blockchain:', error);
+        alert('Failed to verify hash on blockchain');
+    }
+}
+
+
+document.getElementById("viewDocumentsBtn").addEventListener("click", () => {
+    document.getElementById("searchSection").style.display = "block";
+});
+document.getElementById("searchButton").addEventListener("click", async () => {
+    const enrollmentId = document.getElementById("enrollmentInput").value.trim();
+
+    if (!enrollmentId) {
+        alert("Please enter a valid Enrollment ID.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/get-cids/${enrollmentId}`);
+        const result = await response.json();
+
+        if (response.status === 404) {
+            alert(result.message);
+            return;
+        }
+
+        if (result.cids) {
+            const cidList = document.getElementById("cidList");
+            cidList.innerHTML = "";
+
+            const select = document.createElement("select");
+            select.id = "cidDropdown";
+            select.classList.add("p-2", "border", "rounded", "w-full");
+
+            for (const cid of result.cids) {
+                const ipfsResponse = await fetch(`https://gateway.pinata.cloud/ipfs/${cid}`);
+                const jsonData = await ipfsResponse.json();
+                const semester = jsonData.Semester || "Unknown"; // Fallback if Semester is not found
+
+                const option = document.createElement("option");
+                option.value = cid; // Keep the CID as the value
+                option.textContent = `Semester ${semester}`;
+                select.appendChild(option);
+            }
+
+
+            cidList.appendChild(select);
+            document.getElementById("viewTranscriptButton").style.display = "block";
+        }
+    } catch (error) {
+        console.error("Error fetching CIDs:", error);
+        alert("Failed to fetch documents. Please try again.");
+    }
+});
+document.getElementById("viewTranscriptButton").addEventListener("click", () => {
+    const selectedCid = document.getElementById("cidDropdown").value;
+    if (!selectedCid) {
+        alert("Please select a valid CID.");
+        return;
+    }
+
+    // Store the CID in localStorage and navigate to the transcript page
+    localStorage.setItem("selectedCid", selectedCid);
+    window.location.href = "view-transcript.html";
+});
+
+        document.getElementById('addInfoBtn').addEventListener('click', function () {
+            const addInfoContainer = document.getElementById('addInfoContainer');
+            addInfoContainer.classList.toggle('hidden');
+        });
+
+        document.getElementById('excelUploadForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const excelInput = document.getElementById('excelInput');
+    
+    const excelFile = excelInput.files[0];
+    if (!excelFile) {
+        alert('Please select an Excel file to upload');
+        return;
+    }
+    const formData = new FormData();
+    document.getElementById('loading2').style.display = 'block';
+    document.getElementById('excelUploadResult').innerText = '';
+    formData.append('file', excelFile);
+    try {
+        const response = await fetch('http://localhost:3000/upload-file', {
+            method: 'POST',
+            body: formData
+        });
+        console.log(response);
+        if (!response.ok) {
+            throw new Error('Failed to upload the Excel file');
+        }
+        const result = await response.json();
+        document.getElementById('excelUploadResult').innerText = `Upload Successful: ${result.message}`;
+    } catch (error) {
+        console.error('Error uploading Excel file:', error);
+        alert('Failed to upload the Excel file');
+    }
+    finally {
+                // Hide loading spinner
+                document.getElementById('loading2').style.display = 'none';
+            }
+});
+
+
+        async function storeHashOnBlockchain(extractedText) {
+            try {
+                const contractAddress = "0x3FC415391628059a39d2F178425cD5de0DeC48A9";
+                const abi = [];
+                const web3 = new Web3('http://127.0.0.1:7545');
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abi, contractAddress);
+                const hash = web3.utils.sha3(extractedText);
+                await contract.methods.storeDocumentHash(hash).send({ from: accounts[0], gas: 3000000 });
+                alert('Document hash stored successfully on blockchain!');
+            } catch (error) {
+                console.error('Error storing hash on blockchain:', error);
+                alert('Failed to store hash on blockchain');
+            }
+        }
+  </script>
+ </body>
+</html>
+</body>
+</html>
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Dashboard</title>
+    <link rel="stylesheet" href="registrar-dashboard.css">
+</head>
+<body>
+   
+    <header class="dashboard-header">
+        <h1>Registrar Dashboard</h1>
+        <p>Welcome, Registrar! Manage document verification, uploads, and more.</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="registrar-dashboard.html">Dashboard</a></li>
+            <li><a href="#documents">Documents</a></li>
+            <li><a href="#upload">Upload</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="dashboard-container">
+       
+        <div class="action-card">
+            <h3>Store Document Hash</h3>
+            <input type="file" id="storeFileInput" accept=".jpg,.jpeg,.png" required>
+            <button onclick="storeDocument()">Store Document</button>
+            <div id="storeResult"></div>
+        </div>
+
+        
+        <div class="action-card">
+            <h3>Verify Document</h3>
+            <input type="file" id="verifyFileInput" accept=".jpg,.jpeg,.png" required>
+            <button onclick="verifyDocument()">Verify Document</button>
+            <div id="verifyResult"></div>
+        </div>
+
+        <div class="action-card">
+            <h3>View Document</h3>
+            <button onclick="viewDocument()">View Verified Document</button>
+            <div id="viewResult"></div>
+        </div>
+    </div>
+
+   
+    <script>
+        let storedHash = null;
+        let storedImage = null;
+
+        // Function to store the document hash
+        function storeDocument() {
+            const fileInput = document.getElementById('storeFileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a document to store');
+                return;
+            }
+
+            // Simulate buffering with setTimeout
+            setTimeout(() => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    storedHash = hashCode(e.target.result); // Simulate hash storage
+                    storedImage = e.target.result; // Store image data for viewing
+                    document.getElementById('storeResult').innerText = 'Hash stored successfully!';
+                };
+                reader.readAsDataURL(file);
+            }, 1000); // Simulate 1 second buffering
+        }
+
+        // Function to verify the document
+        function verifyDocument() {
+            const fileInput = document.getElementById('verifyFileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a document to verify');
+                return;
+            }
+
+            // Simulate buffering with setTimeout
+            setTimeout(() => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadedHash = hashCode(e.target.result);
+
+                    if (storedHash && uploadedHash === storedHash) {
+                        document.getElementById('verifyResult').innerText = 'Transcript verified!';
+                    } else {
+                        document.getElementById('verifyResult').innerText = 'Transcript not verified.';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }, 1000); // Simulate 1 second buffering
+        }
+
+        // Function to view the verified document
+    function viewDocument() {
+        if (storedImage) {
+            // Create a clickable link to open the image in a new tab
+            document.getElementById('viewResult').innerHTML = `<a href="${storedImage}" target="_blank"><img src="${storedImage}" alt="Verified Document" style="max-width:100%;"></a>`;
+        } else {
+            document.getElementById('viewResult').innerText = 'No verified document to view.';
+        }
+    }
+
+
+        // Simple hash function for demonstration purposes
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash |= 0; // Convert to 32-bit integer
+            }
+            return hash;
+        }
+    </script>
+</body>
+</html>
+-->

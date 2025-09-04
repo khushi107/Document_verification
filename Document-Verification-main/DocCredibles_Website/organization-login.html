@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Organization Login</h1>
+    </header>
+    <main class="container">
+        <form onsubmit="handleOrgLogin(event)">
+            <label for="orgCode">Organization Code:</label>
+            <input type="text" id="orgCode" required>
+            <button type="submit">OK</button>
+        </form>
+    </main>
+    <script>
+        function handleOrgLogin(event) {
+            event.preventDefault();
+            const orgCode = document.getElementById('orgCode').value;
+            if (orgCode) {
+                location.href = 'role-selection.html';
+            } else {
+                alert('Please enter a valid organization code');
+            }
+        }
+    </script>
+</body>
+</html>

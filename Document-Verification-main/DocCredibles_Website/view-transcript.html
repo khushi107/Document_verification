@@ -1,0 +1,331 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Card</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-4xl mx-auto bg-white p-8 shadow-md">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <img src="spsu_logo.png" alt="SPSU Logo" class="h-16">
+                <br>
+                <p><strong>Serial No. </strong><span id="serial-no"></span></p>
+            </div>
+            <div class="text-right">
+                <h1 class="text-xl font-bold" id="university-name"></h1>
+                <p class="text-sm">SPSU</p>
+            </div>
+        </div>
+        <h2 class="text-center text-2xl font-bold mb-4">Grade Card</h2>
+        <div class="mb-4">
+            <p><strong>School of <span id="school-of"></span></strong></p>
+            <p><strong>Academic Session:</strong> <span id="academic-session"></span></p>
+            <p><strong>Semester:</strong> <span id="semester"></span></p>
+            <p><strong>Enrollment No.:</strong> <span id="enrollment-no"></span></p>
+            <p><strong>Name of the Student:</strong> <span id="student-name"></span></p>
+            <p><strong>Father Name:</strong> <span id="father-name"></span></p>
+            <p><strong>Mother Name:</strong> <span id="mother-name"></span></p>
+            <p><strong>Degree:</strong> <span id="degree"></span></p>
+            <p><strong>Programme:</strong> <span id="programme"></span></p>
+            <p><strong>Aadhaar Number:</strong> <span id="aadhaar-number"></span></p>
+        </div>
+        <table class="w-full border-collapse border border-gray-400 mb-4">
+            <thead>
+                <tr>
+                    <th class="border border-gray-400 p-2">Course No.</th>
+                    <th class="border border-gray-400 p-2">Course Title</th>
+                    <th class="border border-gray-400 p-2">Credit</th>
+                    <th class="border border-gray-400 p-2">Grade Earned</th>
+                    <th class="border border-gray-400 p-2">Grade Point</th>
+                </tr>
+            </thead>
+            <tbody id="course-details">
+                <!-- Course details will be populated here -->
+            </tbody>
+        </table>
+        <div class="mb-4">
+            <p><strong>Total Credits Offered till this Semester:</strong> <span id="total-credits"></span></p>
+            <p><strong>Semester Credits Cleared:</strong> <span id="semester-credits"></span></p>
+            <p><strong>Cumulative Credits Cleared:</strong> <span id="cumulative-credits"></span></p>
+            <p><strong>Grade Point Average (GPA):</strong> <span id="gpa"></span></p>
+            <p><strong>Cumulative Grade Point Average (CGPA):</strong> <span id="cgpa"></span></p>
+        </div>
+        <table class="w-full border-collapse border border-gray-400 mb-4">
+            <thead>
+                <tr>
+                    <th class="border border-gray-400 p-2">Semester</th>
+                    <th class="border border-gray-400 p-2">I</th>
+                    <th class="border border-gray-400 p-2">II</th>
+                    <th class="border border-gray-400 p-2">III</th>
+                    <th class="border border-gray-400 p-2">IV</th>
+                    <th class="border border-gray-400 p-2">V</th>
+                    <th class="border border-gray-400 p-2">VI</th>
+                    <th class="border border-gray-400 p-2">VII</th>
+                    <th class="border border-gray-400 p-2">VIII</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border border-gray-400 p-2">GPA</td>
+                    <td class="border border-gray-400 p-2" id="gpa-semester"></td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-400 p-2">CGPA</td>
+                    <td class="border border-gray-400 p-2" id="cgpa-semester"></td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                    <td class="border border-gray-400 p-2">-</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="flex justify-between items-center mb-4">
+            <div class="text-center">
+                <p>Controller of Examination</p>
+                <img src="COE.png" alt="Controller of Examination Signature" class="h-12 mx-auto">
+            </div>
+            <div class="text-center">
+                <p>Dean</p>
+                <img src="DEAN.png" alt="Dean Signature" class="h-12 mx-auto">
+            </div>
+            <div class="text-center">
+                <p>Registrar</p>
+                <img src="Registrar.png" alt="Registrar Signature" class="h-12 mx-auto">
+            </div>
+        </div>
+        <div class="text-center">
+            <p><strong>Date:</strong> <span id="date"></span></p>
+            <p>Conversion of CGPA into percentage: CGPA x 10</p>
+        </div>
+    </div>
+
+    <script>
+//         const data = {
+//     "University": "SPSU",
+//     "Serial No.": "22-23/7695",
+//     "School of": "School of Computer Science",
+//     "Year": "2022-2023",
+//     "Registration No.": "22cs002515",
+//     "Name of the Student": "Ashwani Kumar Sharma",
+//     "Father": "Uma Shankar Sharma",
+//     "Mother Name": "Antima Sharma",
+//     "Degree": "B.Tech",
+//     "Semester": 1,
+//     "Discipline": "Computer Science and Engineering",
+//     "course details": [
+//         {
+//             "Course No.": "chp2101",
+//             "Course Title": "EVS and Sustainability",
+//             "Credit": 1,
+//             "Grade Earned": "A",
+//             "Grade Point": 8.0
+//         },
+//         {
+//             "Course No.": "cse2101",
+//             "Course Title": "Programming and Data Structures Using C",
+//             "Credit": 4,
+//             "Grade Earned": "A+",
+//             "Grade Point": 36.0
+//         },
+//         {
+//             "Course No.": "cse2102",
+//             "Course Title": "Programming and Data Structures Lab",
+//             "Credit": 1,
+//             "Grade Earned": "A",
+//             "Grade Point": 8.0
+//         },
+//         {
+//             "Course No.": "cse2103",
+//             "Course Title": "Python Programming with Lab",
+//             "Credit": 3,
+//             "Grade Earned": "A+",
+//             "Grade Point": 27.0
+//         },
+//         {
+//             "Course No.": "ece2101",
+//             "Course Title": "Basic Electronics Engineering",
+//             "Credit": 3,
+//             "Grade Earned": "A+",
+//             "Grade Point": 27.0
+//         },
+//         {
+//             "Course No.": "ece2102",
+//             "Course Title": "Basic Electronics Engineering Lab",
+//             "Credit": 1,
+//             "Grade Earned": "A+",
+//             "Grade Point": 9.0
+//         },
+//         {
+//             "Course No.": "huc2101",
+//             "Course Title": "Effective Communication",
+//             "Credit": 2,
+//             "Grade Earned": "A+",
+//             "Grade Point": 18.0
+//         },
+//         {
+//             "Course No.": "mas2101",
+//             "Course Title": "Calculus and Statistical Analysis",
+//             "Credit": 3,
+//             "Grade Earned": "A",
+//             "Grade Point": 24.0
+//         },
+//         {
+//             "Course No.": "phs2101",
+//             "Course Title": "Applied Physics",
+//             "Credit": 3,
+//             "Grade Earned": "A",
+//             "Grade Point": 24.0
+//         },
+//         {
+//             "Course No.": "phs2102",
+//             "Course Title": "Applied Physics Lab",
+//             "Credit": 1,
+//             "Grade Earned": "A",
+//             "Grade Point": 8.0
+//         }
+//     ],
+//     "additional_details": {
+//         "Semester Credits Cleared": 22,
+//         "Total Credits Earned": 22,
+//         "GPA": 8.59,
+//         "Cumulative GPA": 8.59,
+//         "Date": "31-05-2023"
+//     }
+// };
+
+//         document.getElementById('university-name').textContent = data.University;
+//         document.getElementById('school-of').textContent = data["School of"];
+//         document.getElementById('academic-session').textContent = data.Year;
+//         document.getElementById('semester').textContent = data.Semester;
+//         document.getElementById('enrollment-no').textContent = data["Registration No."];
+//         document.getElementById('student-name').textContent = data["Name of the Student"];
+//         document.getElementById('father-name').textContent = data.Father;
+//         document.getElementById('mother-name').textContent = data["Mother Name"];
+//         document.getElementById('degree').textContent = data.Degree;
+//         document.getElementById('programme').textContent = data.Discipline;
+//         document.getElementById('aadhaar-number').textContent = data["Aadhaar Number"];
+//         document.getElementById('total-credits').textContent = data.additional_details["Total Credits Earned"];
+//         document.getElementById('semester-credits').textContent = data.additional_details["Semester Credits Cleared"];
+//         document.getElementById('cumulative-credits').textContent = data.additional_details["Total Credits Earned"];
+//         document.getElementById('gpa').textContent = data.additional_details.GPA;
+//         document.getElementById('cgpa').textContent = data.additional_details["Cumulative GPA"];
+//         document.getElementById('gpa-semester').textContent = data.additional_details.GPA;
+//         document.getElementById('cgpa-semester').textContent = data.additional_details["Cumulative GPA"];
+//         document.getElementById('date').textContent = data.additional_details.Date;
+
+//         const courseDetails = data["course details"];
+//         const courseDetailsContainer = document.getElementById('course-details');
+
+//         courseDetails.forEach(course => {
+//             const row = document.createElement('tr');
+//             row.innerHTML = `
+//                 <td class="border border-gray-400 p-2">${course["Course No."]}</td>
+//                 <td class="border border-gray-400 p-2">${course["Course Title"]}</td>
+//                 <td class="border border-gray-400 p-2">${course.Credit}</td>
+//                 <td class="border border-gray-400 p-2">${course["Grade Earned"]}</td>
+//                 <td class="border border-gray-400 p-2">${course["Grade Point"]}</td>
+//             `;
+//             courseDetailsContainer.appendChild(row);
+//         });
+// Automatically fetch and populate transcript data on page load
+document.addEventListener("DOMContentLoaded", () => {
+    const cid = localStorage.getItem("selectedCid"); // Get the CID from localStorage or another source
+    if (!cid) {
+        alert("No CID found. Please select a transcript first.");
+        return;
+    }
+
+    // Call the function to fetch and populate the transcript
+    fetchTranscript(cid)
+        .then(data => populateTranscript(data))
+        .catch(error => console.error("Error loading transcript:", error));
+});
+
+async function fetchTranscript(cid) {
+    const gatewayUrl = `https://ipfs.io/ipfs/${cid}`;
+    console.log(`Attempting to fetch transcript from: ${gatewayUrl}`);
+
+    try {
+        const response = await fetch(gatewayUrl);
+        if (!response.ok) {
+            console.error(`HTTP Error: ${response.status} - ${response.statusText}`);
+            throw new Error(`Failed to fetch data. HTTP Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Transcript data fetched successfully:", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching transcript data:", error.message);
+        throw new Error("Failed to fetch transcript data from IPFS");
+    }
+}
+
+function populateTranscript(data) {
+    // General details
+    console.log("Populating transcript with data:", data);
+    document.getElementById('serial-no').textContent = data["Serial No."] || "N/A";
+    document.getElementById('university-name').textContent = data.University || "N/A";
+    document.getElementById('school-of').textContent = data["School of"] || "N/A";
+    document.getElementById('academic-session').textContent = data.Year || "N/A";
+    document.getElementById('semester').textContent = data.Semester || "N/A";
+    document.getElementById('enrollment-no').textContent = data["Registration No."] || "N/A";
+    document.getElementById('student-name').textContent = data["Name of the Student"] || "N/A";
+    document.getElementById('father-name').textContent = data.Father || "N/A";
+    document.getElementById('mother-name').textContent = data["Mother Name"] || "N/A";
+    document.getElementById('degree').textContent = data.Degree || "N/A";
+    document.getElementById('programme').textContent = data.Discipline || "N/A";
+
+    // Course details
+    const courseDetailsContainer = document.getElementById('course-details');
+    console.log("Course details container:", courseDetailsContainer);
+    courseDetailsContainer.innerHTML = ""; // Clear any previous data
+
+    if (data["course details"] && Array.isArray(data["course details"])) {
+        data["course details"].forEach(course => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="border border-gray-400 p-2">${course["Course No."] || "N/A"}</td>
+                <td class="border border-gray-400 p-2">${course["Course Title"] || "N/A"}</td>
+                <td class="border border-gray-400 p-2">${course.Credit || "N/A"}</td>
+                <td class="border border-gray-400 p-2">${course["Grade Earned"] || "N/A"}</td>
+                <td class="border border-gray-400 p-2">${course["Grade Point"] || "N/A"}</td>
+            `;
+            courseDetailsContainer.appendChild(row);
+        });
+    }
+
+    // Additional details
+    const additionalDetails = data.additional_details || {};
+    document.getElementById('total-credits').textContent = additionalDetails["Total Credits Offered till this Semester"] || "N/A";
+    document.getElementById('semester-credits').textContent = additionalDetails["Semester Credits Cleared"] || "N/A";
+    document.getElementById('cumulative-credits').textContent = additionalDetails["Cumulative Credits Cleared"] || "N/A";
+    document.getElementById('gpa').textContent = additionalDetails.GPA || "N/A";
+    document.getElementById('cgpa').textContent = additionalDetails["Cumulative GPA"] || "N/A";
+    document.getElementById('gpa-semester').textContent = additionalDetails.GPA || "N/A";
+    document.getElementById('cgpa-semester').textContent = additionalDetails["Cumulative GPA"] || "N/A";
+
+    // Date
+    document.getElementById('date').textContent = additionalDetails.Date || "N/A";
+}
+
+
+    </script>
+</body>
+</html>
